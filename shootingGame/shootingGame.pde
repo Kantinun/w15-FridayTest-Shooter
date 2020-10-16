@@ -118,6 +118,7 @@ class Zombie{
   void update(){
     for(Bullet bullet:sBullet){
       if((x-size/2 <= bullet.x && bullet.x<= x+size/2) && (y-size/2<=bullet.y && bullet.y <= y+size/2)){
+        size += size/5;
         life-=1;
         fill(255,250,250);
         stroke(0);
