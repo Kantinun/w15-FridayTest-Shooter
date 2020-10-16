@@ -189,7 +189,6 @@ void draw(){
       tempZom.add(zombie.get(i));
     }else{s.score += zombie.get(i).point;}
   }
-  
   zombie = tempZom;
   if(random(1) < 0.009){
     zombie.add(new Zombie());
