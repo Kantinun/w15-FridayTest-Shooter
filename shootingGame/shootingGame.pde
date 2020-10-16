@@ -40,7 +40,7 @@ class Shooter{
         fill(255, 0, 0);
         stroke(0);
         textAlign(CENTER);
-        textFont(font);
+        //textFont(font);
         text("GAME OVER",width/2,height/2);
         noLoop();
       }
@@ -82,6 +82,8 @@ class Bullet{
 class Zombie{
   float x,y,size,vel;
   int life;
+  int stuntTimeMax, stuntTime;
+  boolean stunt;
   
   Zombie(){
     size = 50;
@@ -89,6 +91,10 @@ class Zombie{
     y = 0;
     vel = 2;
     life = 3;
+    stunt = false;
+    stuntTimeMax = 3;
+    stuntTime =0;
+    
   }
   
   void display(){
@@ -115,6 +121,23 @@ class Zombie{
       }else{return false;}
   }
   
+  boolean checkBullet(Bullet bullet){
+      if((x-size/2 <= bullet.x && bullet.x<= x+size/2) && (y-size/2<=bullet.y && bullet.y <= y+size/2)){
+        return true;
+      }else{return false;}
+    
+  }
+  
+  void move(){
+       if(dist(s.x,s.y,x,y) > 0){
+        float angle = atan((s.y-y)/(s.x-x));
+        float directionX = ((s.x-x)/abs((s.x-x)));
+        float directionY = ((s.y-y)/abs((s.y-y)));
+        x += directionX*abs(cos(angle))*vel;
+        y += directionY*abs(sin(angle))*vel;
+      }
+    }
+  
   void update(){
     for(Bullet bullet:sBullet){
       if((x-size/2 <= bullet.x && bullet.x<= x+size/2) && (y-size/2<=bullet.y && bullet.y <= y+size/2)){
@@ -125,15 +148,12 @@ class Zombie{
         ellipseMode(CENTER);
         ellipse(x, y, size, size);
         bullet.firing = false;
+        stunt = true;
       }
     }
-    if(dist(s.x,s.y,x,y) > 0){
-      float angle = atan((s.y-y)/(s.x-x));
-      float directionX = ((s.x-x)/abs((s.x-x)));
-      float directionY = ((s.y-y)/abs((s.y-y)));
-      x += directionX*abs(cos(angle))*vel;
-      y += directionY*abs(sin(angle))*vel;
-    } 
+   if(!stunt){move();} 
+   if(stuntTime<stuntTimeMax){stuntTime++;}
+   
   }              
 }
 
