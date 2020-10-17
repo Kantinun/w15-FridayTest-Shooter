@@ -2,6 +2,8 @@ class Shooter{
   int x,y,size;
   float coolDown,vel;
   boolean right,left,up,down,space;
+  int score;
+  
   Shooter(){
     size = 50;
     x = width/2;
@@ -15,6 +17,9 @@ class Shooter{
     stroke(0);
     ellipseMode(CENTER);
     ellipse(x, y, size, size);
+
+    textAlign(CENTER);
+    text(score,width/2,45);
   }
   void move(){
     if(right){x+=vel;}    
@@ -40,7 +45,7 @@ class Shooter{
         fill(255, 0, 0);
         stroke(0);
         textAlign(CENTER);
-        //textFont(font);
+        textSize(60);
         text("GAME OVER",width/2,height/2);
         noLoop();
       }
@@ -81,9 +86,9 @@ class Bullet{
 
 class Zombie{
   float x,y,size,vel;
-  int life;
   int stuntTimeMax, stuntTime;
   boolean stunt;
+  int life,point;
   
   Zombie(){
     size = 50;
@@ -95,11 +100,13 @@ class Zombie{
     stuntTimeMax = 3;
     stuntTime =0;
     
+    point = 10;
   }
   
   void display(){
     fill(255, 0, 0);
     stroke(0);
+    textSize(40);
     ellipseMode(CENTER);
     ellipse(x, y, size, size);
   }
@@ -165,7 +172,7 @@ PFont font;
 
 void setup(){
   size(600, 600);
-  font = createFont("a.ttf",120);
+ 
   s = new Shooter();
   zombie.add(new Zombie());
 }
@@ -201,8 +208,9 @@ void draw(){
     zombie.get(i).update();
     if(zombie.get(i).life > 0){
       tempZom.add(zombie.get(i));
-    }
+    }else{s.score += zombie.get(i).point;}
   }
+  
   zombie = tempZom;
   if(random(1) < 0.009){
     zombie.add(new Zombie());
@@ -220,9 +228,11 @@ void keyPressed(){
   if(key == 'r' || key == 'R'){
     background(50);
     zombie = new ArrayList<Zombie>();
-    s.size = 50;
+    sBullet = new ArrayList<Bullet>();
+    
     s.x = width/2;
     s.y = height-s.size;
+    s.score =0;
     loop();
   }
 }
